@@ -1,0 +1,2045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StudyVault — Academic Resource Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d14;
+    --surface: #10141e;
+    --surface2: #161c2a;
+    --border: rgba(255,255,255,0.06);
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --accent3: #00d4aa;
+    --warn: #f7934f;
+    --text: #e8eaf2;
+    --muted: #6b7394;
+    --card: #13182a;
+    --glow: rgba(79,142,247,0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Instrument Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Background grid */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.03) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── NAVBAR ─── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 64px;
+    background: rgba(10,13,20,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .logo span { color: var(--accent); }
+
+  .logo-icon {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover, .nav-links a.active { color: var(--text); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none;
+    padding: 0.45rem 1.1rem;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .nav-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    z-index: 1;
+    padding: 5rem 2.5rem 3rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 400px;
+    background: radial-gradient(ellipse, rgba(79,142,247,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(79,142,247,0.1);
+    border: 1px solid rgba(79,142,247,0.25);
+    border-radius: 100px;
+    padding: 0.3rem 0.9rem;
+    font-size: 0.78rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    letter-spacing: 0.04em;
+  }
+
+  h1 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    margin-bottom: 1rem;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  h1 em {
+    font-style: normal;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 480px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.6;
+  }
+
+  /* ─── STATS ROW ─── */
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 2.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent), var(--accent3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .stat-label {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin-top: 0.1rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  /* ─── SEARCH & FILTER BAR ─── */
+  .controls {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+    margin: 0 auto 3rem;
+    padding: 0 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .search-wrap {
+    position: relative;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 1rem;
+    pointer-events: none;
+  }
+
+  #search-input {
+    width: 100%;
+    padding: 0.9rem 1rem 0.9rem 2.8rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: 'Instrument Sans', sans-serif;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  #search-input:focus {
+    border-color: rgba(79,142,247,0.4);
+    box-shadow: 0 0 0 3px rgba(79,142,247,0.08);
+  }
+
+  #search-input::placeholder { color: var(--muted); }
+
+  /* Filter row */
+  .filter-row {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .filter-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .filter-chips {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 0.38rem 0.85rem;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    white-space: nowrap;
+  }
+
+  .chip:hover { border-color: var(--accent); color: var(--accent); }
+
+  .chip.active {
+    background: rgba(79,142,247,0.12);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Type filter */
+  .type-chips .chip.active[data-type="pyq"] {
+    background: rgba(247,147,79,0.12);
+    border-color: var(--warn);
+    color: var(--warn);
+  }
+
+  .type-chips .chip.active[data-type="notes"] {
+    background: rgba(0,212,170,0.12);
+    border-color: var(--accent3);
+    color: var(--accent3);
+  }
+
+  .type-chips .chip.active[data-type="material"] {
+    background: rgba(124,92,252,0.12);
+    border-color: var(--accent2);
+    color: var(--accent2);
+  }
+
+  /* Divider */
+  .filter-divider {
+    width: 1px;
+    height: 20px;
+    background: var(--border);
+  }
+
+  /* ─── RESOURCE GRID ─── */
+  .section {
+    position: relative;
+    z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2.5rem 5rem;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .result-count {
+    font-size: 0.82rem;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.7rem;
+    border-radius: 100px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.25rem;
+  }
+
+  /* ─── CARD ─── */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.4rem;
+    cursor: pointer;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp 0.4s both;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--card-accent, var(--accent)), transparent);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  .card:hover {
+    border-color: rgba(79,142,247,0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card[data-type="pyq"] { --card-accent: var(--warn); }
+  .card[data-type="notes"] { --card-accent: var(--accent3); }
+  .card[data-type="material"] { --card-accent: var(--accent2); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+
+  .card-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+
+  .card[data-type="pyq"] .card-icon { background: rgba(247,147,79,0.12); }
+  .card[data-type="notes"] .card-icon { background: rgba(0,212,170,0.12); }
+  .card[data-type="material"] .card-icon { background: rgba(124,92,252,0.12); }
+
+  .card-badges {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .badge {
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .badge-sem {
+    background: rgba(79,142,247,0.1);
+    color: var(--accent);
+    border: 1px solid rgba(79,142,247,0.2);
+  }
+
+  .badge-type-pyq { background: rgba(247,147,79,0.1); color: var(--warn); }
+  .badge-type-notes { background: rgba(0,212,170,0.1); color: var(--accent3); }
+  .badge-type-material { background: rgba(124,92,252,0.1); color: var(--accent2); }
+
+  .card-title {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.35rem;
+    line-height: 1.3;
+  }
+
+  .card-subject {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  .card-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.78rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 0.9rem;
+  }
+
+  .card-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .card-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .btn-view {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text);
+    font-size: 0.8rem;
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+  }
+
+  .btn-view:hover {
+    background: var(--surface2);
+    border-color: rgba(255,255,255,0.12);
+  }
+
+  .btn-download {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-size: 0.8rem;
+    font-family: 'Instrument Sans', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.18s, transform 0.18s;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+
+  .btn-download:hover { opacity: 0.85; transform: translateY(-1px); }
+
+  .course-select {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    margin: 1rem 0 0;
+    max-width: 280px;
+  }
+
+  .course-select label {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 500;
+  }
+
+  .course-select select {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    padding: 0.85rem 1rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .course-select select:focus {
+    border-color: rgba(79,142,247,0.45);
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  .nav-cta.secondary {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--text);
+  }
+
+  .community-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+
+  .discussion-summary {
+    color: var(--muted);
+    font-size: 0.95rem;
+    max-width: 640px;
+  }
+
+  .discussion-list {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .discussion-card {
+    padding: 1.2rem;
+    border-radius: 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.16);
+  }
+
+  .discussion-card h3 {
+    margin: 0 0 0.7rem;
+    font-size: 1rem;
+  }
+
+  .discussion-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .attached-doc {
+    margin-top: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--accent);
+    font-size: 0.88rem;
+  }
+
+  .discussion-comments {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .comment-item {
+    padding: 0.95rem 1rem;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .comment-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .comment-box {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .comment-box textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
+
+  .discussion-comments h4 {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--text);
+  }
+
+  .discussion-comments p.comment-empty {
+    color: var(--muted);
+    margin: 0;
+    font-size: 0.92rem;
+  }
+
+  .new-discussion-panel {
+    padding: 1.25rem;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    margin-top: 1.25rem;
+  }
+
+  .new-discussion-panel h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .form-row label {
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 12px;
+    padding: 0.9rem 1rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+  }
+
+  .form-row textarea {
+    min-height: 120px;
+    resize: vertical;
+  }
+
+  .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .btn-attach {
+    padding: 0.55rem 0.9rem;
+    border-radius: 9px;
+    border: 1px solid rgba(79,142,247,0.22);
+    background: rgba(79,142,247,0.12);
+    color: var(--accent);
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+
+  .btn-attach:hover {
+    transform: translateY(-1px);
+    background: rgba(79,142,247,0.18);
+  }
+
+  .college-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .college-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 1.2rem;
+    min-height: 220px;
+  }
+
+  .college-card h3 {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+  }
+
+  .course-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .course-item {
+    padding: 0.5rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+    font-size: 0.82rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: fit-content;
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .gallery-item {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .gallery-item img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+  }
+
+  .gallery-item span {
+    display: block;
+    padding: 0.8rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.66);
+    padding: 1.25rem;
+  }
+
+  .modal {
+    width: min(520px, 100%);
+    max-height: 90vh;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    overflow: hidden;
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.35);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.25rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .modal-body {
+    padding: 1.25rem;
+    display: grid;
+    gap: 1rem;
+    max-height: calc(90vh - 172px);
+    overflow-y: auto;
+  }
+
+  .preview-content img,
+  .preview-content iframe {
+    width: 100%;
+    border-radius: 16px;
+    min-height: 280px;
+    background: var(--surface);
+  }
+
+  .preview-content iframe {
+    border: 0;
+    min-height: 420px;
+  }
+
+  .preview-note {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .question-list {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .question-item {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    padding: 0.95rem 1rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .question-index {
+    min-width: 32px;
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: rgba(79, 142, 247, 0.16);
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  .paper-img {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .img-viewer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .paper-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: rgba(10, 13, 20, 0.9);
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    z-index: 10;
+  }
+
+  .paper-img {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.08);
+    object-fit: contain;
+    max-height: 70vh;
+  }
+
+  .modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  .modal-tab {
+    flex: 1;
+    padding: 0.7rem;
+    background: transparent;
+    border: none;
+    color: var(--muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.15s;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+  }
+
+  .modal-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  .modal-close {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+  }
+
+  .modal-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .modal-actions .nav-cta,
+  .modal-actions .btn-view {
+    width: auto;
+  }
+
+  @media (max-width: 640px) {
+    .community-top {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .form-actions,
+    .modal-actions {
+      flex-direction: column;
+    }
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    display: none;
+  }
+
+  .empty-state.visible { display: block; }
+
+  .empty-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.4; }
+
+  .empty-state h3 {
+    font-family: 'Clash Display', sans-serif;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-state p { color: var(--muted); font-size: 0.9rem; }
+
+  /* ─── FOOTER ─── */
+  footer {
+    position: relative;
+    z-index: 1;
+    border-top: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    z-index: 999;
+    transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+    white-space: nowrap;
+  }
+
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* Responsive */
+  @media (max-width: 900px) {
+    nav {
+      padding: 0 1rem;
+      height: 56px;
+      gap: 0.75rem;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .nav-cta {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      font-size: 0.9rem;
+      max-width: 180px;
+    }
+
+    .hero {
+      padding: 3rem 1rem 1.5rem;
+    }
+
+    .hero-badge {
+      font-size: 0.75rem;
+      padding: 0.28rem 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 6vw, 2.8rem);
+      max-width: 100%;
+    }
+
+    .hero-sub {
+      font-size: 1rem;
+      max-width: 100%;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .controls {
+      max-width: 100%;
+      margin-bottom: 2rem;
+      padding: 0 1rem;
+    }
+
+    .filter-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.85rem;
+    }
+
+    .filter-row .filter-label,
+    .filter-row .filter-chips {
+      width: 100%;
+    }
+
+    .filter-chips {
+      flex-wrap: wrap;
+    }
+
+    .section {
+      padding: 0 1rem 4rem;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .card {
+      padding: 1.15rem;
+    }
+
+    .card-top {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.75rem;
+    }
+
+    .card-actions {
+      flex-direction: column;
+    }
+
+    .btn-download,
+    .btn-view {
+      width: 100%;
+    }
+
+    .college-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .gallery-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      padding: 2.5rem 0.85rem 1.25rem;
+    }
+
+    .hero-badge {
+      font-size: 0.72rem;
+      padding: 0.24rem 0.75rem;
+    }
+
+    .search-wrap {
+      width: 100%;
+    }
+
+    #search-input {
+      padding: 0.85rem 1rem 0.85rem 2.4rem;
+    }
+
+    .stats-row {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.6rem;
+    }
+
+    .section {
+      padding-bottom: 3.5rem;
+    }
+
+    .college-grid,
+    .gallery-grid {
+      grid-template-columns: 1fr;
+    }
+
+    footer {
+      padding: 1.5rem 1rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo">
+    <div class="logo-icon">📚</div>
+    Study<span>Vault</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#" class="nav-link active" data-view="resources">Resources</a></li>
+    <li><a href="#" class="nav-link" data-view="timetable">Timetable</a></li>
+    <li><a href="#" class="nav-link" data-view="community">Community</a></li>
+    <li><a href="#" class="nav-link" data-view="about">About</a></li>
+  </ul>
+  <button class="nav-cta" id="upload-btn">Upload Resource</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-badge">✦ Free Academic Resources</div>
+  <h1>Your Ultimate <em>Study Hub</em> for Every Semester</h1>
+  <p class="hero-sub">Access PYQs, notes & study material — curated by toppers, organized by semester.</p>
+</section>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="stat">
+    <div class="stat-num">1,240+</div>
+    <div class="stat-label">PYQ Papers</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">850+</div>
+    <div class="stat-label">Note Sets</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">320+</div>
+    <div class="stat-label">Subjects</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num">8</div>
+    <div class="stat-label">Semesters</div>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search-input" placeholder="Search by subject, topic or keyword…">
+  </div>
+  <div class="course-select">
+    <label for="course-select">Select college</label>
+    <select id="course-select">
+      <option value="all">All colleges</option>
+      <option value="agribusiness">College of Agribusiness Management</option>
+      <option value="agriculture">College of Agriculture</option>
+      <option value="basic">College of Basic Sciences and Humanities</option>
+      <option value="fisheries">College of Fisheries</option>
+      <option value="community">College of Community Science</option>
+      <option value="technology">College of Technology</option>
+      <option value="veterinary">College of Veterinary & Animal Sciences</option>
+      <option value="postgraduate">College of Post Graduate Studies</option>
+    </select>
+  </div>
+  <div class="filter-row">
+    <span class="filter-label">Semester:</span>
+    <div class="filter-chips" id="sem-chips">
+      <button class="chip active" data-sem="all">All</button>
+      <button class="chip" data-sem="1">Sem 1</button>
+      <button class="chip" data-sem="2">Sem 2</button>
+      <button class="chip" data-sem="3">Sem 3</button>
+      <button class="chip" data-sem="4">Sem 4</button>
+      <button class="chip" data-sem="5">Sem 5</button>
+      <button class="chip" data-sem="6">Sem 6</button>
+      <button class="chip" data-sem="7">Sem 7</button>
+      <button class="chip" data-sem="8">Sem 8</button>
+    </div>
+    <div class="filter-divider"></div>
+    <span class="filter-label">Type:</span>
+    <div class="filter-chips type-chips" id="type-chips">
+      <button class="chip active" data-type="all">All</button>
+      <button class="chip" data-type="pyq">PYQ</button>
+      <button class="chip" data-type="notes">Notes</button>
+      <button class="chip" data-type="material">Material</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESOURCE GRID -->
+<section class="section" id="resource-section">
+  <div class="section-header">
+    <h2 class="section-title">Resources</h2>
+    <span class="result-count" id="result-count">Loading…</span>
+  </div>
+  <div class="grid" id="resource-grid"></div>
+  <div class="empty-state" id="empty-state">
+    <div class="empty-icon">🔎</div>
+    <h3>No resources found</h3>
+    <p>Try adjusting the filters or search query.</p>
+  </div>
+</section>
+
+<section class="section college-section">
+  <div class="section-header">
+    <h2 class="section-title">Colleges & Courses</h2>
+    <span class="result-count">Organized by college</span>
+  </div>
+  <div class="college-grid" id="college-grid"></div>
+</section>
+
+<section class="section gallery-section">
+  <div class="section-header">
+    <h2 class="section-title">Study Sheets Gallery</h2>
+    <span class="result-count">WhatsApp uploads</span>
+  </div>
+  <div class="gallery-grid">
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.30.28.jpeg" alt="Study sheet 1"></div>
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.30.30.jpeg" alt="Study sheet 2"></div>
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.30.31.jpeg" alt="Study sheet 3"></div>
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.30.32.jpeg" alt="Study sheet 4"></div>
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.31.24.jpeg" alt="Study sheet 5"></div>
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.31.25.jpeg" alt="Study sheet 6"></div>
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.31.26.jpeg" alt="Study sheet 7"></div>
+    <div class="gallery-item"><img src="images/WhatsApp Image 2026-05-06 at 22.31.27.jpeg" alt="Study sheet 8"></div>
+  </div>
+</section>
+
+<section class="section hidden" id="community-section">
+  <div class="section-header">
+    <h2 class="section-title">Community Discussions</h2>
+    <span class="result-count" id="discussion-count">Live conversations</span>
+  </div>
+  <div class="community-top">
+    <div class="discussion-summary">Jump into ongoing discussions or start a new conversation with a resource attached.</div>
+    <button class="nav-cta secondary" id="new-discussion-btn">Start New Discussion</button>
+  </div>
+  <div class="discussion-list" id="discussion-list"></div>
+  <div class="new-discussion-panel hidden" id="new-discussion-panel">
+    <h3>New discussion</h3>
+    <div class="form-row">
+      <label for="discussion-title">Discussion title</label>
+      <input id="discussion-title" placeholder="Discuss a topic or ask a question…">
+    </div>
+    <div class="form-row">
+      <label for="discussion-message">Message</label>
+      <textarea id="discussion-message" placeholder="Write your discussion starter..."></textarea>
+    </div>
+    <div class="form-row">
+      <label for="discussion-attach">Attach resource</label>
+      <select id="discussion-attach">
+        <option value="">None</option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button class="nav-cta" id="post-discussion-btn">Post Discussion</button>
+      <button class="btn-view" id="cancel-discussion-btn">Cancel</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  Made with 💙 for students &nbsp;·&nbsp; <a href="#">Contribute</a> &nbsp;·&nbsp; <a href="#">Report Issue</a>
+</footer>
+
+<!-- UPLOAD MODAL -->
+<div class="modal-overlay hidden" id="upload-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Upload Resource</h3>
+      <button class="modal-close" id="close-upload">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row">
+        <label for="upload-title">Title</label>
+        <input id="upload-title" placeholder="Resource title">
+      </div>
+      <div class="form-row">
+        <label for="upload-subject">Subject</label>
+        <input id="upload-subject" placeholder="Subject name">
+      </div>
+      <div class="form-row">
+        <label for="upload-college">College</label>
+        <select id="upload-college">
+          <option value="">Select college</option>
+          <option value="College of Agribusiness Management">College of Agribusiness Management</option>
+          <option value="College of Agriculture">College of Agriculture</option>
+          <option value="College of Basic Sciences and Humanities">College of Basic Sciences and Humanities</option>
+          <option value="College of Fisheries">College of Fisheries</option>
+          <option value="College of Community Science">College of Community Science</option>
+          <option value="College of Technology">College of Technology</option>
+          <option value="College of Veterinary & Animal Sciences">College of Veterinary & Animal Sciences</option>
+          <option value="College of Post Graduate Studies">College of Post Graduate Studies</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="upload-sem">Semester</label>
+        <select id="upload-sem">
+          <option value="1">Sem 1</option>
+          <option value="2">Sem 2</option>
+          <option value="3">Sem 3</option>
+          <option value="4">Sem 4</option>
+          <option value="5">Sem 5</option>
+          <option value="6">Sem 6</option>
+          <option value="7">Sem 7</option>
+          <option value="8">Sem 8</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="upload-type">Type</label>
+        <select id="upload-type">
+          <option value="pyq">PYQ</option>
+          <option value="notes">Notes</option>
+          <option value="material">Material</option>
+        </select>
+      </div>
+      <div class="form-row">
+        <label for="upload-pages">Pages</label>
+        <input id="upload-pages" type="number" min="1" placeholder="Number of pages">
+      </div>
+      <div class="form-row">
+        <label for="upload-year">Year</label>
+        <input id="upload-year" type="number" min="2000" placeholder="Year">
+      </div>
+      <div class="form-row">
+        <label for="upload-file">Upload file</label>
+        <input id="upload-file" type="file" accept="image/*,application/pdf">
+      </div>
+      <div class="modal-actions">
+        <button class="nav-cta" id="submit-upload-btn">Upload</button>
+        <button class="btn-view" id="cancel-upload-btn">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PREVIEW MODAL -->
+<div class="modal-overlay hidden" id="preview-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3>Resource Preview</h3>
+      <button class="modal-close" id="close-preview">✕</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" data-tab="questions">Questions</button>
+      <button class="modal-tab" data-tab="paper">Paper</button>
+    </div>
+    <div class="modal-body preview-content">
+      <p>Loading preview details...</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-view" id="preview-ok">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ───
+const resources = [
+  { id:1, title:"Engineering Mathematics I — 2023 PYQ", subject:"Engineering Mathematics", sem:1, type:"pyq", pages:28, year:2023, downloads:1420, icon:"📐" },
+  { id:2, title:"Engineering Physics Complete Notes", subject:"Engineering Physics", sem:1, type:"notes", pages:94, year:2023, downloads:980, icon:"⚡" },
+  { id:3, title:"Basic Electronics Study Material", subject:"Basic Electronics", sem:1, type:"material", pages:62, year:2022, downloads:740, icon:"🔌" },
+  { id:4, title:"C Programming PYQ Pack (2019–2023)", subject:"C Programming", sem:2, type:"pyq", pages:45, year:2023, downloads:2100, icon:"💻" },
+  { id:5, title:"Data Structures & Algorithms Notes", subject:"Data Structures", sem:3, type:"notes", pages:118, year:2023, downloads:1750, icon:"🌲" },
+  { id:6, title:"Signals & Systems PYQ 2022", subject:"Signals & Systems", sem:4, type:"pyq", pages:32, year:2022, downloads:890, icon:"〰️" },
+  { id:7, title:"Database Management Systems Notes", subject:"DBMS", sem:4, type:"notes", pages:76, year:2023, downloads:1340, icon:"🗄️" },
+  { id:8, title:"Operating Systems Study Guide", subject:"Operating Systems", sem:5, type:"material", pages:88, year:2023, downloads:1100, icon:"🖥️" },
+  { id:9, title:"Computer Networks PYQ 2023", subject:"Computer Networks", sem:5, type:"pyq", pages:38, year:2023, downloads:960, icon:"🌐" },
+  { id:10, title:"Software Engineering Notes", subject:"Software Engineering", sem:6, type:"notes", pages:102, year:2023, downloads:820, icon:"🛠️" },
+  { id:11, title:"Machine Learning Reference Material", subject:"Machine Learning", sem:7, type:"material", pages:140, year:2023, downloads:2400, icon:"🤖" },
+  { id:12, title:"Cloud Computing PYQ 2023", subject:"Cloud Computing", sem:8, type:"pyq", pages:30, year:2023, downloads:670, icon:"☁️" },
+  { id:13, title:"Digital Electronics PYQ Pack", subject:"Digital Electronics", sem:3, type:"pyq", pages:41, year:2022, downloads:1050, icon:"🔧" },
+  { id:14, title:"Thermodynamics Complete Notes", subject:"Thermodynamics", sem:2, type:"notes", pages:85, year:2023, downloads:600, icon:"🔥" },
+  { id:15, title:"Compiler Design Study Material", subject:"Compiler Design", sem:6, type:"material", pages:98, year:2022, downloads:490, icon:"⚙️" },
+  { id:16, title:"Engineering Chemistry Notes", subject:"Engineering Chemistry", sem:1, type:"notes", pages:70, year:2023, downloads:810, icon:"🧪" },
+  { id:17, title:"Discrete Mathematics PYQ 2023", subject:"Discrete Mathematics", sem:3, type:"pyq", pages:36, year:2023, downloads:1200, icon:"∑" },
+  { id:18, title:"Artificial Intelligence Notes", subject:"Artificial Intelligence", sem:7, type:"notes", pages:120, year:2023, downloads:1800, icon:"🧠" },
+  { id:19, title:"Strength of Materials Notes", subject:"Mechanics of Materials", sem:2, type:"notes", pages:88, year:2023, downloads:410, icon:"🛠️" },
+  { id:20, title:"Structural Analysis PYQ 2023", subject:"Structural Engineering", sem:3, type:"pyq", pages:44, year:2023, downloads:530, icon:"🏗️" },
+  { id:21, title:"Civil Engineering Drawing Material", subject:"Civil Engineering", sem:4, type:"material", pages:54, year:2022, downloads:360, icon:"📐" },
+  { id:22, title:"BBEN-104 Environmental Studies PYQ 2025", subject:"Environmental Studies and Disaster Management", sem:2, type:"pyq", pages:10, year:2025, downloads:430, icon:"🌿", college:"College of Basic Sciences and Humanities", questions:["Which of the following is a major cause of deforestation?","What is the leading cause of desertification?","Which is the largest reservoir of freshwater on Earth?","What is the main reason for constructing large dams?","Which energy source is NOT renewable?","Which of the following is the main cause of eutrophication in water bodies?","Earth Day is celebrated every year on which date?"], images:["images/WhatsApp Image 2026-05-06 at 22.30.30.jpeg","images/WhatsApp Image 2026-05-06 at 22.30.31.jpeg"] },
+  { id:23, title:"BBEN-104 Environmental Studies PYQ 2025 — Answer Sheet", subject:"Environmental Studies and Disaster Management", sem:2, type:"pyq", pages:10, year:2025, downloads:320, icon:"📝", college:"College of Basic Sciences and Humanities", questions:["Describe the causes of deforestation.","Explain drought and its control measures.","List the benefits and problems of dam construction."], images:["images/WhatsApp Image 2026-05-06 at 22.30.28.jpeg","images/WhatsApp Image 2026-05-06 at 22.30.32.jpeg"] },
+  { id:24, title:"APPN-311 Plant Pathology PYQ 2025", subject:"Fundamentals of Plant Pathology", sem:2, type:"pyq", pages:12, year:2025, downloads:780, icon:"🌾", college:"College of Agriculture", questions:["Write True/False for key plant pathology statements.","Fill in the blanks with plant pathology terms.","Differentiate between eukaryote and prokaryote, and symptom and sign."], images:["images/WhatsApp Image 2026-05-06 at 22.31.24.jpeg","images/WhatsApp Image 2026-05-06 at 22.31.25.jpeg"] },
+  { id:25, title:"APPN-311 Plant Pathology PYQ 2025 — Continued", subject:"Fundamentals of Plant Pathology", sem:2, type:"pyq", pages:12, year:2025, downloads:660, icon:"📄", college:"College of Agriculture", questions:["Choose the correct answers on plant disease management.","Match plant disease groups to symptoms.","Explain the role of fungicides and quarantine in plant disease control."], images:["images/WhatsApp Image 2026-05-06 at 22.31.26.jpeg","images/WhatsApp Image 2026-05-06 at 22.31.27.jpeg"] },
+];
+
+// ─── STATE ───
+let activeSem = "all";
+let activeType = "all";
+let searchQuery = "";
+
+function getTypeBadgeClass(type) {
+  return `badge-type-${type}`;
+}
+
+function getTypeLabel(type) {
+  return { pyq: "PYQ", notes: "Notes", material: "Material" }[type] || type;
+}
+
+function sortResources(data) {
+  return [...data].sort((a, b) => {
+    const aImages = Array.isArray(a.images) && a.images.length > 0;
+    const bImages = Array.isArray(b.images) && b.images.length > 0;
+    const aFile = !!a.fileUrl;
+    const bFile = !!b.fileUrl;
+    const aScore = (aImages ? 2 : 0) + (aFile ? 1 : 0);
+    const bScore = (bImages ? 2 : 0) + (bFile ? 1 : 0);
+    if (bScore !== aScore) return bScore - aScore;
+    return (b.id || 0) - (a.id || 0);
+  });
+}
+
+function renderCards(data) {
+  const grid = document.getElementById("resource-grid");
+  const empty = document.getElementById("empty-state");
+  const count = document.getElementById("result-count");
+  const sortedData = sortResources(data);
+
+  if (sortedData.length === 0) {
+    grid.innerHTML = "";
+    empty.classList.add("visible");
+    count.textContent = "0 results";
+    return;
+  }
+
+  empty.classList.remove("visible");
+  count.textContent = `${sortedData.length} result${sortedData.length !== 1 ? "s" : ""}`;
+
+  grid.innerHTML = sortedData.map((r, i) => `
+    <div class="card" data-type="${r.type}" style="animation-delay:${i * 0.04}s" onclick="handleCardClick('${r.title}')">
+      <div class="card-top">
+        <div class="card-icon">${r.icon}</div>
+        <div class="card-badges">
+          <span class="badge badge-sem">Sem ${r.sem}</span>
+          <span class="badge ${getTypeBadgeClass(r.type)}">${getTypeLabel(r.type)}</span>
+        </div>
+      </div>
+      <div class="card-title">${r.title}</div>
+      <div class="card-subject">${r.subject}</div>
+      <div class="card-meta">
+        ${r.college ? `<span class="card-meta-item">🏛️ ${r.college}</span>` : ''}
+        <span class="card-meta-item">📄 ${r.pages} pages</span>
+        <span class="card-meta-item">📅 ${r.year}</span>
+      </div>
+      <div class="card-actions">
+        <button class="btn-view" onclick="event.stopPropagation(); showPreview(${r.id})">👁 Preview</button>
+        <button class="btn-download" onclick="event.stopPropagation(); downloadResource(${r.id})">⬇ Download</button>
+        <button class="btn-attach" onclick="event.stopPropagation(); attachDocument(${r.id})">📎 Add Doc</button>
+      </div>
+    </div>
+  `).join("");
+}
+
+function matchesCourse(resource) {
+  const courseValue = document.getElementById("course-select").value;
+  if (courseValue === "all") return true;
+  const text = `${resource.title} ${resource.subject}`.toLowerCase();
+  const courseMap = {
+    agribusiness: ["agribusiness", "agricultural economics", "food business", "supply chain"],
+    agriculture: ["agronomy", "horticulture", "soil", "plant", "seed"],
+    basic: ["physics", "chemistry", "mathematics", "english", "environmental"],
+    fisheries: ["fisheries", "aquaculture", "fish", "marine"],
+    community: ["nutrition", "human development", "textile", "family resource", "food"],
+    technology: ["computer", "electrical", "mechanical", "civil", "information", "electronics"],
+    veterinary: ["veterinary", "animal", "dairy", "poultry", "livestock"],
+    postgraduate: ["mba", "m.sc", "m.tech", "m.com", "post graduate"]
+  };
+  return (courseMap[courseValue] || []).some(keyword => text.includes(keyword));
+}
+
+function applyFilters() {
+  const selectedCourse = document.getElementById("course-select").value;
+  const data = resources.filter(r => {
+    const semOk = activeSem === "all" || r.sem === parseInt(activeSem, 10);
+    const typeOk = activeType === "all" || r.type === activeType;
+    const courseOk = selectedCourse === "all" || matchesCourse(r);
+    const q = searchQuery.toLowerCase();
+    const searchOk = !q || r.title.toLowerCase().includes(q) || r.subject.toLowerCase().includes(q);
+    return semOk && typeOk && courseOk && searchOk;
+  });
+  renderCards(data);
+}
+
+function renderDiscussions() {
+  const list = document.getElementById("discussion-list");
+  list.innerHTML = discussions.map(d => `
+    <article class="discussion-card">
+      <h3>${d.title}</h3>
+      <div class="discussion-meta">${d.author} · ${d.time} · ${d.comments} comments</div>
+      <p>${d.message}</p>
+      ${d.attachment ? `<div class="attached-doc">📎 Attached: ${d.attachment}</div>` : ""}
+      <div class="discussion-comments">
+        <h4>Community replies</h4>
+        ${d.replies && d.replies.length ? d.replies.map(reply => `
+          <div class="comment-item">
+            <div class="comment-meta"><span>${reply.author}</span><span>${reply.time}</span></div>
+            <p>${reply.message}</p>
+          </div>
+        `).join('') : `<p class="comment-empty">No comments yet. Be the first to reply.</p>`}
+        <div class="comment-box">
+          <textarea id="comment-input-${d.id}" placeholder="Write a comment..."></textarea>
+          <button class="nav-cta" onclick="postComment(${d.id})">Post Comment</button>
+        </div>
+      </div>
+    </article>
+  `).join("");
+  document.getElementById("discussion-count").textContent = `${discussions.length} discussion${discussions.length !== 1 ? "s" : ""}`;
+}
+
+const collegeData = [
+  {
+    college: 'College of Agribusiness Management',
+    courses: ['Agribusiness Management', 'Food Business Management', 'Agricultural Economics', 'Supply Chain Management']
+  },
+  {
+    college: 'College of Agriculture',
+    courses: ['Agronomy', 'Horticulture', 'Soil Science', 'Plant Pathology', 'Seed Technology']
+  },
+  {
+    college: 'College of Basic Sciences and Humanities',
+    courses: ['Physics', 'Chemistry', 'Mathematics', 'English', 'Environmental Science']
+  },
+  {
+    college: 'College of Fisheries',
+    courses: ['Fisheries Science', 'Aquaculture', 'Fish Processing Technology', 'Marine Biology']
+  },
+  {
+    college: 'College of Community Science',
+    courses: ['Nutrition & Dietetics', 'Human Development', 'Textile and Apparel Design', 'Family Resource Management']
+  },
+  {
+    college: 'College of Technology',
+    courses: ['Computer Science & Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Information Technology']
+  },
+  {
+    college: 'College of Veterinary & Animal Sciences',
+    courses: ['Veterinary Science', 'Animal Husbandry', 'Dairy Technology', 'Poultry Science', 'Livestock Management']
+  },
+  {
+    college: 'College of Post Graduate Studies',
+    courses: ['MBA', 'M.Sc. Environmental Science', 'M.Sc. Food Science', 'M.Tech', 'M.Com']
+  }
+];
+
+function renderCollegeCards() {
+  const grid = document.getElementById('college-grid');
+  grid.innerHTML = collegeData.map(college => `
+    <div class="college-card">
+      <h3>${college.college}</h3>
+      <ul class="course-list">
+        ${college.courses.map(course => `<li class="course-item">${course}</li>`).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+function setActiveNav(view) {
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.classList.toggle('active', link.dataset.view === view);
+  });
+  if (view === 'resources') {
+    openSection('resources');
+  } else if (view === 'community') {
+    openSection('community');
+  } else {
+    showToast('Coming soon — explore Resources or Community.');
+    openSection('resources');
+  }
+}
+
+function openSection(section) {
+  const resourceSection = document.getElementById('resource-section');
+  const communitySection = document.getElementById('community-section');
+  if (section === 'community') {
+    resourceSection.classList.add('hidden');
+    communitySection.classList.remove('hidden');
+  } else {
+    communitySection.classList.add('hidden');
+    resourceSection.classList.remove('hidden');
+    hideNewDiscussionPanel();
+  }
+}
+
+function showUploadModal() {
+  document.getElementById('upload-modal').classList.remove('hidden');
+}
+
+function closeUploadModal() {
+  document.getElementById('upload-modal').classList.add('hidden');
+}
+
+function showPreview(resourceId) {
+  const resource = resources.find(r => r.id === resourceId);
+  if (!resource) {
+    showToast('Preview unavailable.');
+    return;
+  }
+  currentResource = resource;
+  currentPreviewTab = "questions";
+  document.querySelectorAll('#preview-modal .modal-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector('#preview-modal .modal-tab[data-tab="questions"]').classList.add('active');
+  renderPreviewBody();
+  document.getElementById('preview-modal').classList.remove('hidden');
+}
+
+function closePreviewModal() {
+  document.getElementById('preview-modal').classList.add('hidden');
+}
+
+function downloadResource(resourceId) {
+  const resource = resources.find(r => r.id === resourceId);
+  if (!resource) {
+    showToast('Resource not found.');
+    return;
+  }
+
+  let downloadUrl = resource.fileUrl;
+  let filename = resource.fileName || resource.title.replace(/\s+/g, '_');
+
+  if (!downloadUrl && resource.images && resource.images.length) {
+    downloadUrl = resource.images[0];
+    filename = filename + '.jpeg';
+  }
+
+  if (!downloadUrl) {
+    showToast('No downloadable file attached.');
+    return;
+  }
+
+  const anchor = document.createElement('a');
+  anchor.href = downloadUrl;
+  anchor.download = filename;
+  anchor.target = '_blank';
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  showToast('⬇️ Download started!');
+}
+
+let currentPreviewTab = "questions";
+let currentResource = null;
+
+function switchPreviewTab(tab, btn) {
+  currentPreviewTab = tab;
+  document.querySelectorAll('#preview-modal .modal-tab').forEach(t => t.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  renderPreviewBody();
+}
+
+function renderPreviewBody() {
+  const content = document.querySelector('#preview-modal .preview-content');
+  if (!currentResource) return;
+  if (currentPreviewTab === "questions") {
+    if (currentResource.questions && currentResource.questions.length) {
+      content.innerHTML = `<div class="question-list">${currentResource.questions.map((q, i) => `
+        <div class="question-item"><span class="question-index">${i + 1}</span><div>${q}</div></div>
+      `).join('')}</div>`;
+    } else {
+      content.innerHTML = `
+        <div class="preview-detail">
+          <p><strong>Title:</strong> ${currentResource.title}</p>
+          <p><strong>Subject:</strong> ${currentResource.subject}</p>
+          <p><strong>Semester:</strong> ${currentResource.sem}</p>
+          <p><strong>Type:</strong> ${getTypeLabel(currentResource.type)}</p>
+          <p><strong>Pages:</strong> ${currentResource.pages}</p>
+          <p><strong>Year:</strong> ${currentResource.year}</p>
+          ${currentResource.college ? `<p><strong>College:</strong> ${currentResource.college}</p>` : ''}
+        </div>
+      `;
+    }
+  } else {
+    let fileHtml = '';
+    if (currentResource.images && currentResource.images.length) {
+      fileHtml = `<button class="paper-close" onclick="closePreviewModal()">✕</button>` + currentResource.images.map(src => `<img class="paper-img" src="${src}" alt="${currentResource.title}">`).join('');
+    } else if (currentResource.fileUrl) {
+      if (currentResource.fileType.startsWith('image/')) {
+        fileHtml = `<button class="paper-close" onclick="closePreviewModal()">✕</button><img class="paper-img" src="${currentResource.fileUrl}" alt="${currentResource.fileName || currentResource.title}">`;
+      } else if (currentResource.fileType === 'application/pdf') {
+        fileHtml = `<button class="paper-close" onclick="closePreviewModal()">✕</button><iframe src="${currentResource.fileUrl}" title="${currentResource.title} PDF"></iframe>`;
+      } else {
+        fileHtml = `<button class="paper-close" onclick="closePreviewModal()">✕</button><p><a href="${currentResource.fileUrl}" target="_blank" rel="noopener noreferrer">Open attached file</a></p>`;
+      }
+    } else {
+      fileHtml = `<button class="paper-close" onclick="closePreviewModal()">✕</button><p class="preview-note">No file attached to this resource.</p>`;
+    }
+    content.innerHTML = `<div class="img-viewer">${fileHtml}</div>`;
+  }
+}
+
+function resetUploadForm() {
+  document.getElementById('upload-title').value = '';
+  document.getElementById('upload-subject').value = '';
+  document.getElementById('upload-sem').value = '1';
+  document.getElementById('upload-college').value = '';
+  document.getElementById('upload-type').value = 'pyq';
+  document.getElementById('upload-pages').value = '';
+  document.getElementById('upload-year').value = '';
+  document.getElementById('upload-file').value = '';
+}
+
+function getIconForType(type) {
+  return type === 'pyq' ? '📑' : type === 'notes' ? '📝' : '📘';
+}
+
+function submitUploadForm() {
+  const title = document.getElementById('upload-title').value.trim();
+  const subject = document.getElementById('upload-subject').value.trim();
+  const college = document.getElementById('upload-college').value;
+  const sem = parseInt(document.getElementById('upload-sem').value, 10);
+  const type = document.getElementById('upload-type').value;
+  const pages = parseInt(document.getElementById('upload-pages').value, 10) || 0;
+  const year = parseInt(document.getElementById('upload-year').value, 10) || new Date().getFullYear();
+  const fileInput = document.getElementById('upload-file');
+  const file = fileInput.files[0];
+  const fileUrl = file ? URL.createObjectURL(file) : '';
+  const fileType = file ? file.type : '';
+  const fileName = file ? file.name : '';
+  if (!title || !subject) {
+    showToast('Please enter a title and subject.');
+    return;
+  }
+  const newId = Math.max(...resources.map(r => r.id)) + 1;
+  resources.unshift({
+    id: newId,
+    title,
+    subject,
+    college,
+    sem,
+    type,
+    pages: pages || 10,
+    year,
+    icon: getIconForType(type),
+    fileUrl,
+    fileType,
+    fileName
+  });
+  applyFilters();
+  populateAttachOptions();
+  closeUploadModal();
+  resetUploadForm();
+  showToast('Resource uploaded successfully.');
+}
+
+function populateAttachOptions() {
+  const attachSelect = document.getElementById('discussion-attach');
+  attachSelect.innerHTML = '<option value="">None</option>' + resources.map(r => `<option value="${r.title}">${r.title} (${r.subject})</option>`).join('');
+}
+
+function showNewDiscussionPanel() {
+  document.getElementById('new-discussion-panel').classList.remove('hidden');
+  document.getElementById('discussion-title').focus();
+}
+
+function hideNewDiscussionPanel() {
+  document.getElementById('new-discussion-panel').classList.add('hidden');
+  document.getElementById('discussion-title').value = '';
+  document.getElementById('discussion-message').value = '';
+  document.getElementById('discussion-attach').value = '';
+}
+
+function attachDocument(resourceId) {
+  const resource = resources.find(r => r.id === resourceId);
+  if (!resource) return;
+  setActiveNav('community');
+  showNewDiscussionPanel();
+  document.getElementById('discussion-title').value = `Discussion: ${resource.title}`;
+  document.getElementById('discussion-message').value = `I want to discuss the resource "${resource.title}" with the community. How should I use it to prepare for exams?`;
+  document.getElementById('discussion-attach').value = resource.title;
+}
+
+function postDiscussion() {
+  const title = document.getElementById('discussion-title').value.trim();
+  const message = document.getElementById('discussion-message').value.trim();
+  const attachment = document.getElementById('discussion-attach').value;
+  if (!title || !message) {
+    showToast('Please enter a title and message for your discussion.');
+    return;
+  }
+  discussions.unshift({
+    id: discussions.length ? Math.max(...discussions.map(d => d.id)) + 1 : 1,
+    title,
+    author: 'You',
+    time: 'Just now',
+    comments: 0,
+    message,
+    attachment: attachment || '',
+    replies: []
+  });
+  renderDiscussions();
+  hideNewDiscussionPanel();
+  showToast('Discussion posted.');
+}
+
+function postComment(discussionId) {
+  const input = document.getElementById(`comment-input-${discussionId}`);
+  if (!input) return;
+  const message = input.value.trim();
+  if (!message) {
+    showToast('Write something before posting a comment.');
+    return;
+  }
+  const discussion = discussions.find(d => d.id === discussionId);
+  if (!discussion) {
+    showToast('Discussion not found.');
+    return;
+  }
+  discussion.replies = discussion.replies || [];
+  discussion.replies.unshift({
+    id: discussion.replies.length ? Math.max(...discussion.replies.map(r => r.id)) + 1 : 1,
+    author: 'You',
+    time: 'Just now',
+    message
+  });
+  discussion.comments = discussion.replies.length;
+  input.value = '';
+  renderDiscussions();
+  showToast('Comment added.');
+}
+
+function handleCardClick(title) {
+  showToast(`📖 Opening: ${title.substring(0, 32)}…`);
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2800);
+}
+
+const discussions = [
+  {
+    id: 1,
+    title: 'Best exam strategy for DBMS notes?',
+    author: 'Priya',
+    time: '2h ago',
+    comments: 3,
+    message: 'Which chapters should I prioritize from the DBMS notes for the upcoming final?',
+    attachment: 'Database Management Systems Notes',
+    replies: [
+      { id: 1, author: 'Ravi', time: '1h ago', message: 'Focus on normalization, ER diagrams and SQL queries first.' },
+      { id: 2, author: 'Meena', time: '45m ago', message: 'Past PYQs are the best. Cover chapter 4 and 5 thoroughly.' },
+      { id: 3, author: 'Akash', time: '20m ago', message: 'Practice as many sample database design problems as possible.' }
+    ]
+  },
+  {
+    id: 2,
+    title: 'How to use C Programming PYQ pack?',
+    author: 'Amit',
+    time: '5h ago',
+    comments: 2,
+    message: 'Can someone share a revision plan using the C Programming PYQ Pack?',
+    attachment: 'C Programming PYQ Pack (2019–2023)',
+    replies: [
+      { id: 1, author: 'Nisha', time: '3h ago', message: 'Start with data types, pointers and arrays, then move to file handling.' },
+      { id: 2, author: 'Rohit', time: '2h ago', message: 'Use the pack for timed practice and review weak topics after every attempt.' }
+    ]
+  },
+  {
+    id: 3,
+    title: 'Signal & Systems question patterns',
+    author: 'Sana',
+    time: '1d ago',
+    comments: 1,
+    message: 'Are there recurring question types in Signals & Systems from the last 5 years?',
+    attachment: '',
+    replies: [
+      { id: 1, author: 'Deepa', time: '20h ago', message: 'Yes, convolution and Fourier transforms keep appearing. Practice those well.' }
+    ]
+  }
+];
+
+document.querySelectorAll('.nav-link').forEach(link => {
+  link.addEventListener('click', event => {
+    event.preventDefault();
+    setActiveNav(link.dataset.view);
+  });
+});
+
+document.getElementById('upload-btn').addEventListener('click', showUploadModal);
+document.getElementById('close-upload').addEventListener('click', closeUploadModal);
+document.getElementById('cancel-upload-btn').addEventListener('click', closeUploadModal);
+document.getElementById('close-preview').addEventListener('click', closePreviewModal);
+document.getElementById('preview-ok').addEventListener('click', closePreviewModal);
+document.getElementById('submit-upload-btn').addEventListener('click', event => {
+  event.preventDefault();
+  submitUploadForm();
+});
+
+document.getElementById('preview-modal').addEventListener('click', e => {
+  if (e.target.classList.contains('modal-tab')) {
+    const tab = e.target.dataset.tab;
+    switchPreviewTab(tab, e.target);
+  }
+});
+
+document.getElementById('course-select').addEventListener('change', () => {
+  applyFilters();
+});
+
+document.getElementById('new-discussion-btn').addEventListener('click', showNewDiscussionPanel);
+document.getElementById('cancel-discussion-btn').addEventListener('click', hideNewDiscussionPanel);
+document.getElementById('post-discussion-btn').addEventListener('click', event => {
+  event.preventDefault();
+  postDiscussion();
+});
+
+document.getElementById('sem-chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  document.querySelectorAll('#sem-chips .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeSem = chip.dataset.sem;
+  applyFilters();
+});
+
+document.getElementById('type-chips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  document.querySelectorAll('#type-chips .chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  activeType = chip.dataset.type;
+  applyFilters();
+});
+
+let debounceTimer;
+document.getElementById('search-input').addEventListener('input', e => {
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(() => {
+    searchQuery = e.target.value;
+    applyFilters();
+  }, 200);
+});
+
+function initPage() {
+  populateAttachOptions();
+  renderDiscussions();
+  renderCollegeCards();
+  applyFilters();
+}
+
+initPage();
+</script>
+</body>
+</html>
